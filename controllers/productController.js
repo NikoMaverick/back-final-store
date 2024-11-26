@@ -126,7 +126,22 @@ function getProductCards(products) {
     return html;
   }
 
+  const showProducts = async (req, res) => {
+    try {
+        const products = await Product.find(); 
+        const productCards = getProductCards(products);
+        const isDashboard = req.url.includes('dashboard');
+        const html = baseHtml + getNavBar(isDashboard) + productCards + '</section></body></html>';
+        res.send(html);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error accessing products." });
+    };
+};
 
-  
 
-module.exports = {}
+
+
+module.exports = {
+    showProducts
+}
