@@ -58,9 +58,75 @@ else {
             </ul>
         </nav> 
     <main>
-`}
-}
+`};
+};
 
 
+function getProductCards(products) {
+    let html = '<section class="productCard id"productCard">';
+    for (let product of products) {
+      html += `
+        <div class="product-card">
+          <img src="/public/assets/${product.image}" alt="${product.team}">
+          <h2>${product.team}</h2>
+          <button class="homeBtn" onClick="window.location.href='/products/${product._id}'">Ver</button>
+        </div>
+      `;
+    }
+    return html;
+  }
+
+  function getProductCard(product) {
+    let html = '<section class="productCard" id="productCard">';
+      html += `
+        <div class="product-card">
+          <img src="/public/assets/${product.image}" alt="${product.team}">
+          <h2>${product.team} + / + ${product.year}</h2>
+          <p>${product.description}</p>
+          <p>Pais: ${product.country}</p>
+          <p>Pais: ${product.league}</p>
+          <p>Talla: ${product.size}</p>
+          <p><strong>${product.price}€</strong></p>
+          <button class="homeBtn" onClick="window.location.href='/dashboard/${product._id}/edit'">Editar</button>
+          <button class="homeBtn" id="deleteProduct">Borrar</button>
+        </div>
+        <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById("deleteProduct").addEventListener('click', function() {
+            if(confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+                fetch("/dashboard/${product._id}/delete", {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json' 
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la red');
+                    }
+                    return response.json(); 
+                })
+                .then(data => {
+                    console.log('Éxito:', data);
+                    alert('Producto eliminado correctamente');
+                    window.location.href = '/dashboard'; 
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            } else {
+                console.log('Eliminación cancelada por el usuario');
+            }
+        });
+    });
+</script>
+        
+      `;
+    
+    return html;
+  }
+
+
+  
 
 module.exports = {}
