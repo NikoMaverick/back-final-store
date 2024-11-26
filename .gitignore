@@ -1,3 +1,4 @@
+
 # Node.js
 node_modules/
 
@@ -9,7 +10,7 @@ yarn-error.log*
 package-lock.jso
 package-lock.json
 
-# Logs and databases  
+# Logs and databases
 *.log  
 *.sqlite  
 *.sqlite3  
@@ -27,7 +28,7 @@ package-lock.json
 /dist/  
 /out/  
 
-# /public/  
+# /public/
 /build-output/
 
 # Archivos de configuración de editor
