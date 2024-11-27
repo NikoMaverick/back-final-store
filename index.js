@@ -1,10 +1,16 @@
 const express = require ("express");
 const app = express();
 const dbConnection = require('./config/bd');
-const router = require('./routes/productRoutes')
+const router = require('./routes/productRoutes');
+const path = require('path');
 
 
-app.get("/", router)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/public', express.static(path.join(__dirname, 'public')))
+app.use('/', router)
+
 
 dbConnection()
 .then(() => {

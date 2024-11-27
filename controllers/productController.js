@@ -6,7 +6,7 @@ const baseHtml = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/public/style.css">
+    <link rel="stylesheet" href="../public/style.css">
     <title>Futbol Nostalgia</title>
 </head>
 <body>
@@ -18,7 +18,7 @@ function getNavBar(isDashboard) {
     <header class="headerTop">
         <div id="logoContainer">
             <a href="/" id="logoLink">
-                <img src="../public/assets/FutbolRetro.webp" alt="Logo" id="logo" style="width: 100px; height: auto;">
+                <img src="/public/assets/FutbolRetro.webp" alt="Logo" id="logo" style="width: 100px; height: auto;">
             </a>
         </div>
     </header>
@@ -42,7 +42,7 @@ else {
     <header class="headerTop">
         <div id="logoContainer">
             <a href="/" id="logoLink">
-                <img src="../public/assets/FutbolRetro.webp" alt="Logo" id="logo" style="width: 100px; height: auto;">
+                <img src="/public/assets/FutbolRetro.webp" alt="Logo" id="logo" style="width: 100px; height: auto;">
             </a>
         </div>
     </header> 
@@ -140,8 +140,35 @@ function getProductCards(products) {
 };
 
 
+const createProduct = async (req, res) => {
+
+    try {
+        const { team, year, description, country, league, image, size, price } = req.body
+        if (!team || !year || !description || !country || !league || !size || !price) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+        const product = await Product.create({
+            team,
+            year,
+            description,
+            country,
+            league,
+            image,
+            size,
+            price
+
+        });
+        res.redirect(`/dashboard/${product._id}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error creating the product" });
+    };
+};
+
+
 
 
 module.exports = {
-    showProducts
+    showProducts,
+    createProduct
 }

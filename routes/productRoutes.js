@@ -5,8 +5,14 @@ const productController = require('../controllers/productController');
 
 
 
-router.get('/', productController.showProducts); 
+router.get('/', productController.showProducts);
+router.get('/products', productController.showProducts);
 
+
+router.get('/dashboard', productController.showProducts);
+
+
+router.post('/dashboard', productController.createProduct); 
 
 
 module.exports = router
