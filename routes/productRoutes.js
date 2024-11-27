@@ -16,7 +16,7 @@ router.get('/dashboard', productController.showProducts);
 router.post('/dashboard', productController.createProduct); 
 
 router.get('/dashboard/:productId', productController.showProductById);
-router.get('/dashboard/:productId/edit', productController.showEditProduct);
+router.get('/dashboard/:productId/edit', productController.showEditProduct); 
 
 
 module.exports = router

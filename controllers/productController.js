@@ -25,11 +25,11 @@ function getNavBar(isDashboard) {
     <nav class="nav-Product" id="nav-Product">
             <ul class="navProduct" id="navProduct">
                 <li><a href="/dashboard">Home</a></li>
-                <li><a href="/dashboard/category/espana">España</a></li>
+                <li><a href="/dashboard/category/spain">España</a></li>
                 <li><a href="/dashboard/category/europa">Europa</a></li>
-                <li><a href="/dashboard/category/selecciones">Selecciones</a></li>
+                <li><a href="/dashboard/category/seleccion">Selecciones</a></li>
                 <li><a href="/dashboard/category/mundo">Resto del mundo</a></li>
-                <li><a href="/dashboard/category/dibujos">Oliver & Benji</a></li>
+                <li><a href="/dashboard/category/campeones">Oliver & Benji</a></li>
                 <li><a href="/dashboard/new">Nuevo producto</a></li>
                 <li><a href="/products">Cerrar Sesion</a></li>
             </ul>
@@ -49,11 +49,11 @@ else {
     <nav class="nav-Product" id="nav-Product">
             <ul class="navProduct" id="navProduct">
                 <li><a href="/products">Home</a></li>
-                <li><a href="/products/category/espana">España</a></li>
+                <li><a href="/products/category/spain">España</a></li>
                 <li><a href="/products/category/europa">Europa</a></li>
                 <li><a href="/products/category/selecciones">Selecciones</a></li>
                 <li><a href="/products/category/mundo">Resto del mundo</a></li>
-                <li><a href="/products/category/dibujos">Oliver & Benji</a></li>
+                <li><a href="/products/category/campeones">Oliver & Benji</a></li>
                 <li><a href="/dashboard/">Iniciar Sesión</a></li>
             </ul>
         </nav> 
@@ -83,6 +83,7 @@ function getProductCards(products) {
           <img src="/public/assets/${product.image}" alt="${product.team}">
           <h2>${product.team} - ${product.year}</h2>
           <p>${product.description}</p>
+          <p>Categoria: ${product.category}</p>
           <p>Pais: ${product.country}</p>
           <p>Liga: ${product.league}</p>
           <p>Talla: ${product.size}</p>
@@ -143,14 +144,15 @@ function getProductCards(products) {
 const createProduct = async (req, res) => {
 
     try {
-        const { team, year, description, country, league, image, size, price } = req.body
-        if (!team || !year || !description || !country || !league || !size || !price) {
+        const { team, year, description, category, country, league, image, size, price } = req.body
+        if (!team || !year || !description || !category || !country || !league || !size || !price) {
             return res.status(400).json({ message: "All fields are required" });
         }
         const product = await Product.create({
             team,
             year,
             description,
+            category,
             country,
             league,
             image,
@@ -209,13 +211,13 @@ const showEditProduct = async (req, res) => {
 
                     <div>
                         <label for="category">Categoría</label>
-                        <select name="category" class="categoryProduct" id="categoryProduct">
+                        <select name="category" required>${product.category} class="categoryProduct" id="categoryProduct">
                             <option value="" disabled selected>Producto</option>
-                            <option value="chaqueta">Chaqueta</option>
-                            <option value="camiseta">Camiseta</option>
-                            <option value="gorra">Gorra</option>
-                            <option value="gafas">Gafas</option>
-                            <option value="casco">Casco</option>
+                            <option value="spain">España</option>
+                            <option value="europa">Europa</option>
+                            <option value="seleccion">Selecciones</option>
+                            <option value="mundo">Resto del mundo</option>
+                            <option value="campeones">Oliver & Benji</option>
                         </select>
                     </div>
 
@@ -303,9 +305,11 @@ const showEditProduct = async (req, res) => {
 
 
 
+
 module.exports = {
     showProducts,
     createProduct,
     showProductById,
-    showEditProduct
+    showEditProduct,
+    
 }

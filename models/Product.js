@@ -4,6 +4,7 @@ const ProductSchema = new mongoose.Schema({
     team: String,
     year: String,
     description: String,
+    category: String,
     country: String,
     league: String,
     image: String,
