@@ -81,10 +81,10 @@ function getProductCards(products) {
       html += `
         <div class="product-card">
           <img src="/public/assets/${product.image}" alt="${product.team}">
-          <h2>${product.team} + / + ${product.year}</h2>
+          <h2>${product.team} - ${product.year}</h2>
           <p>${product.description}</p>
           <p>Pais: ${product.country}</p>
-          <p>Pais: ${product.league}</p>
+          <p>Liga: ${product.league}</p>
           <p>Talla: ${product.size}</p>
           <p><strong>${product.price}€</strong></p>
           <button class="homeBtn" onClick="window.location.href='/dashboard/${product._id}/edit'">Editar</button>
@@ -166,9 +166,25 @@ const createProduct = async (req, res) => {
 };
 
 
+const showProductById = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.productId);
+        if(!product) {
+            return res.status(400).json({ messenge: "Product not found" })
+        }
+        const isDashboard = req.url.includes('dashboard');
+        const html = baseHtml + getNavBar(isDashboard) + getProductCard(product) + '</section></body></html>';
+        res.send(html);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "Error accessing product", error});
+    };
+}
+
 
 
 module.exports = {
     showProducts,
-    createProduct
+    createProduct,
+    showProductById
 }
