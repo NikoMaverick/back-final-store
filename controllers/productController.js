@@ -182,9 +182,130 @@ const showProductById = async (req, res) => {
 }
 
 
+const showEditProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.productId);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+        const html = baseHtml + getNavBar() + `
+                <form method="POST" id="formEditProduct" action="/dashboard/${product._id}" enctype="multipart/form-data">
+                
+                    <div>
+                            <h2 class="editH2">EDITAR PRODUCTO</h2>
+                        </div>
+
+                    <div>
+                        <label for="name">Producto</label>
+                        <input type="text" id="name" name="name" value="${product.team}" required>
+                    </div>
+                    
+
+                    <div>
+                        <label for="description">Descripción</label>
+                        <textarea id="description" name="description" required>${product.description}</textarea>
+                    </div>
+                    
+
+                    <div>
+                        <label for="category">Categoría</label>
+                        <select name="category" class="categoryProduct" id="categoryProduct">
+                            <option value="" disabled selected>Producto</option>
+                            <option value="chaqueta">Chaqueta</option>
+                            <option value="camiseta">Camiseta</option>
+                            <option value="gorra">Gorra</option>
+                            <option value="gafas">Gafas</option>
+                            <option value="casco">Casco</option>
+                        </select>
+                    </div>
+
+
+                     <div>
+                        <label for="image">Imagen</label>
+                        <input type="file" id="image" name="image"
+                        src="${product.image}" value="${product.team}">
+                    </div>
+                    
+
+                    <div>
+                        <label for="size">Talla</label>
+                        <select name="size" class="sizeProduct" id="sizeProduct">
+                            <option value="" disabled selected>Talla</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                        </select>
+                    </div>
+                    
+                    
+                    <div>
+                        <label for="price">Precio</label>
+                        <input type="number" id="price" name="price" value="${product.price}" required>
+                    </div>
+                    
+
+                    <div>
+                        <button type="submit">Actualizar producto</button>
+                        <button type="button" class="cancelButton" id="cancelButton">Cancelar</button>    
+                    </div>
+                    
+                </form>
+            </main>
+        </body>
+        <script>
+            document.getElementById('formEditProduct').addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    const formData = new FormData(this);
+
+                    
+                    const data = {};
+                    formData.forEach((value, key) => {
+                        data[key] = value;
+                    });
+
+                    fetch("/dashboard/${product._id}", {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error en la red');
+                        }
+                        return response.json(); 
+                    })
+                    .then(data => {
+                        console.log('Éxito:', data);
+                        window.location.href="/dashboard/${product._id}"
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+                });
+                document.getElementById('cancelButton').addEventListener('click', function() {
+                    window.history.back();
+                });
+        </script>
+        </html>
+        `;
+        console.log(html)
+        res.send(html);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error while accessing the product" });
+    };
+};
+
+
 
 module.exports = {
     showProducts,
     createProduct,
-    showProductById
+    showProductById,
+    showEditProduct
 }
