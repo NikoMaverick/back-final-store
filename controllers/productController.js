@@ -17,9 +17,11 @@ function getNavBar(isDashboard) {
         return `
     <header class="headerTop">
         <div id="logoContainer">
+            <p>FUTBOL</p>
             <a href="/" id="logoLink">
-                <img src="/public/assets/FutbolRetro.webp" alt="Logo" id="logo" style="width: 100px; height: auto;">
+                <img src="/public/assets/Logo.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
             </a>
+            <p>NOSTALGIA</p>
         </div>
     </header>
     <nav class="nav-Product" id="nav-Product">
@@ -41,11 +43,13 @@ else {
     return `
     <header class="headerTop">
         <div id="logoContainer">
+            <p>FUTBOL</p>
             <a href="/" id="logoLink">
-                <img src="/public/assets/FutbolRetro.webp" alt="Logo" id="logo" style="width: 100px; height: auto;">
+                <img src="/public/assets/Logo.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
             </a>
+            <p>NOSTALGIA</p>
         </div>
-    </header> 
+    </header>
     <nav class="nav-Product" id="nav-Product">
             <ul class="navProduct" id="navProduct">
                 <li><a href="/products">Home</a></li>
@@ -87,7 +91,8 @@ function getProductCards(products) {
           <p>Pais: ${product.country}</p>
           <p>Liga: ${product.league}</p>
           <p><strong>${product.price}€</strong></p>
-          <select name="size" class="sizeProduct" id="sizeProduct">
+          <div class="size-basket">
+            <select name="size" class="sizeProduct" id="sizeProduct">
               <option value="" disabled selected>Talla</option>
               <option value="XS">XS</option>
               <option value="S">S</option>
@@ -95,11 +100,14 @@ function getProductCards(products) {
               <option value="L">L</option>
               <option value="XL">XL</option>
               <option value="XXL">XXL</option>
-          </select>
-          <input type="number" id="product-basket" name="product-basket" min="1" max="10" value="1" required>
-          <button type="submit">Añadir a la cesta</button>
-          <button class="homeBtn" onClick="window.location.href='/dashboard/${product._id}/edit'">Editar</button>
-          <button class="homeBtn" id="deleteProduct">Borrar</button>
+            </select>
+            <input type="number" id="product-basket" name="product-basket" min="1" max="10" value="1" required>
+            <button type="submit">Añadir a la cesta</button>
+          </div>
+          <div class="editDelete">
+            <button class="homeBtn" onClick="window.location.href='/dashboard/${product._id}/edit'">Editar</button>
+            <button class="homeBtn" id="deleteProduct">Borrar</button>
+          </div>
 
         </div>
         <script>
