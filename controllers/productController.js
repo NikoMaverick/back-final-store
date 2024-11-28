@@ -243,8 +243,8 @@ const showEditProduct = async (req, res) => {
 
                      <div>
                         <label for="image">Imagen</label>
-                        <input type="file" id="image" name="image"
-                        src="${product.image}" value="${product.team}">
+                        <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}" />
+                        <input type="file" id="image" name="image">
                     </div>
                     
 
@@ -423,6 +423,19 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+const showProductsByCategory = async (req, res) => {
+    try {
+        const products = await Product.find({category: req.params.category}); 
+        const productCards = getProductCards(products);
+        const isDashboard = req.url.includes('dashboard');
+        const html = baseHtml + getNavBar(isDashboard) + productCards + '</section></body></html>';
+        res.send(html);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error accessing products." });
+    };
+}
+
 
 
 module.exports = {
@@ -431,5 +444,7 @@ module.exports = {
     showProductById,
     showEditProduct,
     showNewProduct,
-    deleteProduct
+    deleteProduct,
+    showProductsByCategory,
+
 }
