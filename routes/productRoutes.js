@@ -11,6 +11,7 @@ router.get('/products/:productId', productController.showProductById);
 
 
 router.get('/dashboard', productController.showProducts);
+router.get('/dashboard/new', productController.showNewProduct); 
 
 
 router.post('/dashboard', productController.createProduct); 

@@ -67,8 +67,8 @@ function getProductCards(products) {
     for (let product of products) {
       html += `
         <div class="product-card">
-          <img src="/public/assets/${product.image}" alt="${product.team}">
-          <h2>${product.team}</h2>
+          <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
+          <h2>${product.team} Temp. ${product.year}</h2>
           <button class="homeBtn" onClick="window.location.href='/products/${product._id}'">Ver</button>
         </div>
       `;
@@ -80,16 +80,27 @@ function getProductCards(products) {
     let html = '<section class="productCard" id="productCard">';
       html += `
         <div class="product-card">
-          <img src="/public/assets/${product.image}" alt="${product.team}">
-          <h2>${product.team} - ${product.year}</h2>
+          <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
+          <h2>${product.team} Temp. ${product.year}</h2>
           <p>${product.description}</p>
           <p>Categoria: ${product.category}</p>
           <p>Pais: ${product.country}</p>
           <p>Liga: ${product.league}</p>
-          <p>Talla: ${product.size}</p>
           <p><strong>${product.price}€</strong></p>
+          <select name="size" class="sizeProduct" id="sizeProduct">
+              <option value="" disabled selected>Talla</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+          </select>
+          <input type="number" id="product-basket" name="product-basket" min="1" max="10" value="1" required>
+          <button type="submit">Añadir a la cesta</button>
           <button class="homeBtn" onClick="window.location.href='/dashboard/${product._id}/edit'">Editar</button>
           <button class="homeBtn" id="deleteProduct">Borrar</button>
+
         </div>
         <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -238,6 +249,7 @@ const showEditProduct = async (req, res) => {
                             <option value="M">M</option>
                             <option value="L">L</option>
                             <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
                         </select>
                     </div>
                     
@@ -303,6 +315,94 @@ const showEditProduct = async (req, res) => {
     };
 };
 
+const showNewProduct = async (req, res) => {
+    try {
+        const isDashboard = req.url.includes('dashboard');
+        const html = baseHtml + getNavBar(isDashboard) + `
+                
+                <div class="formProduct" id="formProduct">
+                    <form action="/dashboard" method="POST">
+
+                        <div>
+                            <h2 class="createH2">Añadir Producto</h2>
+                        </div>
+                        
+
+                        <div>
+                            <label for="team">Equipo</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div>
+                            <label for="year">Temporada</label>
+                            <input type="text" id="year" name="year" required>
+                        </div>
+                        
+
+                        <div>
+                            <label for="description">Descripción</label>
+                            <textarea id="description" name="description" required></textarea>
+                        </div>
+                        
+
+                        <div>
+                            <label for="category">Categoría</label>
+                            <select name="category" class="categoryProduct" id="categoryProduct">
+                                <option value="" disabled selected>Procedencia</option>
+                                <option value="spain">España</option>
+                                <option value="europa">Europa</option>
+                                <option value="seleccion">Selecciones</option>
+                                <option value="mundo">Resto del mundo</option>
+                                <option value="campeones">Oliver & Benji</option>
+                            </select>
+                        </div>
+                        
+
+                        <div>
+                            <label for="image">Imagen</label>
+                            <input type="file" id="image" name="image">
+                        </div>    
+                        
+
+                        <div>
+                            <label for="size">Talla</label>
+                            <select name="size" class="sizeProduct" id="sizeProduct">
+                                <option value="" disabled selected>Talla</option>
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                            </select>
+                        </div>
+                        
+
+                        <div>
+                            <label for="price">Precio</label>
+                            <input type="number" id="price" name="price" min="0" value="0" required>
+                        </div>
+                        
+
+                        <div>
+                            <button type="submit" class="formCreateProduct" >Añadir producto</button>
+                        </div>
+            
+                    </form>
+                </div>
+            </main>
+        </body>
+    </html>
+    `;
+        res.send(html);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "The form cannot be accessed"});
+    }
+    
+};
+
+
 
 
 
@@ -311,5 +411,5 @@ module.exports = {
     createProduct,
     showProductById,
     showEditProduct,
-    
+    showNewProduct
 }
