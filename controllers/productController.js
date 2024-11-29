@@ -410,6 +410,40 @@ const showProductsByCategory = async (req, res) => {
     };
 }
 
+const updateProduct = async (req, res) => {
+    try {
+        let { team, year, description, category, country, league, image, size, price } = req.body;
+        image = '';
+        
+        if (!team || !year || !description || !category || !country || !league || !size || !price) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.productId,
+            { 
+            team,
+            year,
+            description,
+            category,
+            country,
+            league,
+            image,
+            size, 
+            price 
+            }, 
+            { new: true } 
+        );
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+        res.status(200).json({ message: "Product updated successfully", product: updatedProduct });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error updating product" });
+    };
+};
+
+
 
 
 module.exports = {
@@ -420,6 +454,6 @@ module.exports = {
     showNewProduct,
     deleteProduct,
     showProductsByCategory,
-
+    updateProduct
 }
 
