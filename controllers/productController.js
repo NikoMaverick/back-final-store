@@ -214,64 +214,57 @@ const showEditProduct = async (req, res) => {
                 <form method="POST" id="formEditProduct" action="/dashboard/${product._id}" enctype="multipart/form-data">
                 
                     <div>
-                            <h2 class="editH2">EDITAR PRODUCTO</h2>
-                        </div>
-
-                    <div>
-                        <label for="name">Producto</label>
-                        <input type="text" id="name" name="name" value="${product.team}" required>
+                        <h2 class="editH2">EDITAR PRODUCTO</h2>
                     </div>
+                
+                    <label for="team">Equipo</label>
+                    <input type="text" id="team" name="team" value="${product.team}" required>
                     
-                    <div>
-                        <label for="description">Descripción</label>
-                        <textarea id="description" name="description" required>${product.description}</textarea>
-                    </div>
+                    <label for="year">Temporada</label>
+                    <input type="text" id="year" name="year" value"${product.year}" required>
+                
+                    <label for="description">Descripción</label>
+                    <textarea id="description" name="description" required>${product.description}</textarea>
                     
+                
+                    <label for="category">Categoría</label>
+                    <select name="category" id="categoryProduct" ${product.category} class="categoryProduct" required>>
+                        <option value="" disabled selected>Producto</option>
+                        <option value="spain">España</option>
+                        <option value="europa">Europa</option>
+                        <option value="seleccion">Selecciones</option>
+                        <option value="mundo">Resto del mundo</option>
+                        <option value="campeones">Oliver & Benji</option>
+                    </select>                                      
 
-                    <div>
-                        <label for="category">Categoría</label>
-                        <select name="category" required>${product.category} class="categoryProduct" id="categoryProduct">
-                            <option value="" disabled selected>Producto</option>
-                            <option value="spain">España</option>
-                            <option value="europa">Europa</option>
-                            <option value="seleccion">Selecciones</option>
-                            <option value="mundo">Resto del mundo</option>
-                            <option value="campeones">Oliver & Benji</option>
-                        </select>
-                    </div>
+                    <label for="country">País</label>
+                    <input type="text" id="country" name="country" ${product.country} required>
 
+                    <label for="league">Liga</label>
+                    <input type="text" id="league" name="league" ${product.league} required>
 
-                     <div>
-                        <label for="image">Imagen</label>
-                        <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}" />
-                        <input type="file" id="image" name="image">
-                    </div>
+                     
+                    <label for="image">Imagen</label>
+                    <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}" />
+                    <input type="file" id="image" name="image">
+
+                    <label for="size">Talla</label>
+                    <select name="size" class="size" id="size" ${product.size} required>
+                        <option value="" disabled selected>Talla</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
                     
+                    <label for="price">Precio</label>
+                    <input type="number" id="price" name="price" min="0" value="${product.price}" required>
 
-                    <div>
-                        <label for="size">Talla</label>
-                        <select name="size" class="sizeProduct" id="sizeProduct">
-                            <option value="" disabled selected>Talla</option>
-                            <option value="XS">XS</option>
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                            <option value="XXL">XXL</option>
-                        </select>
-                    </div>
-                    
-                    
-                    <div>
-                        <label for="price">Precio</label>
-                        <input type="number" id="price" name="price" value="${product.price}" required>
-                    </div>
-                    
+                    <button type="submit">Actualizar producto</button>
+                    <button type="button" class="cancelButton" id="cancelButton">Cancelar</button>    
 
-                    <div>
-                        <button type="submit">Actualizar producto</button>
-                        <button type="button" class="cancelButton" id="cancelButton">Cancelar</button>    
-                    </div>
                     
                 </form>
             </main>
