@@ -72,7 +72,7 @@ function getProductCards(products) {
       html += `
         <div class="product-card">
           <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
-          <h2>${product.team} Temp. ${product.year}</h2>
+          <h2>${product.team} - Temp. ${product.year}</h2>
           <button class="homeBtn" onClick="window.location.href='/products/${product._id}'">Ver</button>
         </div>
       `;
@@ -85,7 +85,7 @@ function getProductCards(products) {
       html += `
         <div class="product-card">
           <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
-          <h2>${product.team} Temp. ${product.year}</h2>
+          <h2>${product.team} - Temp. ${product.year}</h2>
           <p>${product.description}</p>
           <p>Categoria: ${product.category}</p>
           <p>Pais: ${product.country}</p>
