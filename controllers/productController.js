@@ -6,7 +6,7 @@ const baseHtml = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../public/style.css">
+    <link rel="stylesheet" href="/public/style.css">
     <title>Futbol Nostalgia</title>
 </head>
 <body>
@@ -167,6 +167,7 @@ const createProduct = async (req, res) => {
         if (!team || !year || !description || !category || !country || !league || !size || !price) {
             return res.status(400).json({ message: "All fields are required" });
         }
+
         const product = await Product.create({
             team,
             year,
@@ -221,7 +222,6 @@ const showEditProduct = async (req, res) => {
                         <input type="text" id="name" name="name" value="${product.team}" required>
                     </div>
                     
-
                     <div>
                         <label for="description">Descripción</label>
                         <textarea id="description" name="description" required>${product.description}</textarea>
@@ -328,74 +328,55 @@ const showNewProduct = async (req, res) => {
         const isDashboard = req.url.includes('dashboard');
         const html = baseHtml + getNavBar(isDashboard) + `
                 
-                <div class="formProduct" id="formProduct">
-                    <form action="/dashboard" method="POST">
+                <form action="/dashboard" method="POST">
 
                         <div>
                             <h2 class="createH2">Añadir Producto</h2>
                         </div>
-                        
 
-                        <div>
-                            <label for="team">Equipo</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
+                        <label for="team">Equipo</label>
+                        <input type="text" id="team" name="team" required>
 
-                        <div>
-                            <label for="year">Temporada</label>
-                            <input type="text" id="year" name="year" required>
-                        </div>
-                        
+                        <label for="year">Temporada</label>
+                        <input type="text" id="year" name="year" required>
 
-                        <div>
-                            <label for="description">Descripción</label>
-                            <textarea id="description" name="description" required></textarea>
-                        </div>
-                        
+                        <label for="description">Descripción</label>
+                        <textarea id="description" name="description" required></textarea>
 
-                        <div>
-                            <label for="category">Categoría</label>
-                            <select name="category" class="categoryProduct" id="categoryProduct">
-                                <option value="" disabled selected>Procedencia</option>
-                                <option value="spain">España</option>
-                                <option value="europa">Europa</option>
-                                <option value="seleccion">Selecciones</option>
-                                <option value="mundo">Resto del mundo</option>
-                                <option value="campeones">Oliver & Benji</option>
-                            </select>
-                        </div>
-                        
+                        <label for="category">Categoría</label>
+                        <select name="category" id="category" required>
+                            <option value="" disabled selected>Añada categoria</option>
+                            <option value="spain">España</option>
+                            <option value="europa">Europa</option>
+                            <option value="seleccion">Selecciones</option>
+                            <option value="mundo">Resto del Mundo</option>
+                            <option value="campeones">Oliver & Benji</option>
+                        </select>
 
-                        <div>
-                            <label for="image">Imagen</label>
-                            <input type="file" id="image" name="image">
-                        </div>    
-                        
+                        <label for="country">País</label>
+                        <input type="text" id="country" name="country" required>
 
-                        <div>
-                            <label for="size">Talla</label>
-                            <select name="size" class="sizeProduct" id="sizeProduct">
-                                <option value="" disabled selected>Talla</option>
-                                <option value="XS">XS</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
-                            </select>
-                        </div>
-                        
+                        <label for="league">Liga</label>
+                        <input type="text" id="league" name="league" required>
 
-                        <div>
-                            <label for="price">Precio</label>
-                            <input type="number" id="price" name="price" min="0" value="0" required>
-                        </div>
-                        
+                        <label for="image">Imagen</label>
+                        <input type="file" id="image" name="image">
 
-                        <div>
-                            <button type="submit" class="formCreateProduct" >Añadir producto</button>
-                        </div>
-            
+                        <label for="size">Talla</label>
+                        <select name="size" id="size" required>
+                            <option value="" disabled selected>Añada talla</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+
+                        <label for="price">Precio</label>
+                        <input type="number" id="price" name="price" min="0" required>
+
+                        <button type="submit">Añadir producto</button>
                     </form>
                 </div>
             </main>
@@ -448,3 +429,4 @@ module.exports = {
     showProductsByCategory,
 
 }
+
