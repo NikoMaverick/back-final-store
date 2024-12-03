@@ -7,7 +7,7 @@ const baseHtml = `
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/public/style.css">
-    <title>Futbol Nostalgia</title>
+    <title>Futbol Retro</title>
 </head>
 <body>
 `
@@ -19,7 +19,7 @@ function getNavBar(isDashboard) {
         <div id="logoContainer">
             <p>FUTBOL</p>
             <a href="/" id="logoLink">
-                <img src="/public/assets/Logo.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
+                <img src="/public/assets/LogoFutbolRetro.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
             </a>
             <p>RETRO</p>
         </div>
@@ -45,7 +45,7 @@ else {
         <div id="logoContainer">
             <p>FUTBOL</p>
             <a href="/" id="logoLink">
-                <img src="/public/assets/Logo.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
+                <img src="/public/assets/LogoFutbolRetro.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
             </a>
             <p>RETRO</p>
         </div>
@@ -72,7 +72,10 @@ function getProductCards(products) {
       html += `
         <div class="product-card">
           <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
-          <h2>${product.team} - Temp. ${product.year}</h2>
+          <div class="leyend">
+            <h2>${product.team}</h2>
+            <h3>Temporada ${product.year}</h3>
+          </div>
           <button class="homeBtn" onClick="window.location.href='/products/${product._id}'">Ver</button>
         </div>
       `;
@@ -85,12 +88,14 @@ function getProductCards(products) {
       html += `
         <div class="product-card">
           <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
-          <h2>${product.team} - Temp. ${product.year}</h2>
-          <p>${product.description}</p>
-          <p>Categoria: ${product.category}</p>
-          <p>Pais: ${product.country}</p>
-          <p>Liga: ${product.league}</p>
-          <p><strong>${product.price}€</strong></p>
+          <div class="leyend">
+            <h2>${product.team} - Temp. ${product.year}</h2>
+            <p>${product.description}</p>
+            <p>Categoria: ${product.category}</p>
+            <p>Pais: ${product.country}</p>
+            <p>Liga: ${product.league}</p>
+            <p><strong>${product.price}€</strong></p>
+          </div>
           <div class="size-basket">
             <select name="size" class="sizeProduct" id="sizeProduct">
               <option value="" disabled selected>Talla</option>

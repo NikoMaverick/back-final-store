@@ -25,7 +25,10 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
-    background-color: #e4c601;
+    background-image: url("/public/assets/cesped1.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 ol, ul {
 	list-style: none;
@@ -47,6 +50,8 @@ table {
 /* Inicio de ejercicio */
 
 
+/* header */
+
 body::-webkit-scrollbar{
     background: white;
     border-radius: 50px;
@@ -65,6 +70,10 @@ body::-webkit-scrollbar-thumb{
     justify-content: center;
     align-items: center;
     height: 100px;
+    background-image: url("/public/assets/cesped3.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 #logoContainer {
@@ -104,7 +113,7 @@ body::-webkit-scrollbar-thumb{
     align-items: center;
     gap: 90px;
     display: flex;
-    height: 60px;
+    height: 40px;
     width: 100%; 
 }
 
@@ -116,9 +125,13 @@ body::-webkit-scrollbar-thumb{
 }
 
 
+/* main */
+
 .homeBtn {
-    background-color: black;
-    color: white;
+    font-weight: bolder;
+    background-color: white;
+    color: black;
+    font-size: 18px;
     border-radius: 10px;
     width: 100px;
     height: 30px;
@@ -132,7 +145,6 @@ body::-webkit-scrollbar-thumb{
     display: flex; 
     justify-content: center; 
     flex-wrap: wrap; 
-    gap: 10px; 
 }
 
 .productCard.id{
@@ -146,7 +158,8 @@ body::-webkit-scrollbar-thumb{
 	border-top-right-radius: 5px;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 30px;
-    gap: 10px;
+    gap: 30px;
+    padding-top: 20px;
 }
 
 
@@ -156,8 +169,20 @@ body::-webkit-scrollbar-thumb{
     padding: 5px; 
     border-radius: 8px; 
     width: 250px; 
-    text-align: center; 
+    text-align: center;
 }
+
+.leyend{
+    margin-top: -10px;
+    font-size: 20px;
+    color: white;
+    text-shadow: 
+        -1.5px -1.5px 0 black, 
+        1.5px -1.5px 0 black, 
+        -1.5px 1.5px 0 black, 
+        1.5px 1.5px 0 black;
+}
+
 
 .product-card button{
     margin-top: 10px;
@@ -175,6 +200,10 @@ body::-webkit-scrollbar-thumb{
 
 .product-card h2{
     margin-top: 15px;
+    padding: 5px;
+    
+    border-radius: 20px;
+    
 }
 
 img{
@@ -212,9 +241,11 @@ h2{
 }
 
 .size-basket button{
-    background-color: black;
-    color: white;
-    width: 150px;
+    font-weight: bolder;
+    background-color: white;
+    color: black;
+    font-size: 18px;
+    width: 180px;
     height: 30px;
     border-top-left-radius: 30px;
     border-top-right-radius: 5px;
@@ -224,8 +255,10 @@ h2{
 }
 
 .size-basket input{
-    background-color: black;
-    color: white;
+    font-weight: bolder;
+    background-color: white;
+    color: black;
+    font-size: 18px;
     border-radius: 10px;
     width: 30px;
     height: 25px;
@@ -237,10 +270,12 @@ h2{
 }
 
 .sizeProduct{
-    background-color: black;
-    color: white;
+    font-weight: bolder;
+    background-color: white;
+    color: black;
+    font-size: 18px;
     border-radius: 10px;
-    width: 80px;
+    width: 90px;
     height: 30px;
     border-top-left-radius: 30px;
     border-top-right-radius: 5px;
