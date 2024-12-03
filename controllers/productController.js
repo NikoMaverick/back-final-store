@@ -21,7 +21,7 @@ function getNavBar(isDashboard) {
             <a href="/" id="logoLink">
                 <img src="/public/assets/Logo.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
             </a>
-            <p>NOSTALGIA</p>
+            <p>RETRO</p>
         </div>
     </header>
     <nav class="nav-Product" id="nav-Product">
@@ -47,7 +47,7 @@ else {
             <a href="/" id="logoLink">
                 <img src="/public/assets/Logo.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
             </a>
-            <p>NOSTALGIA</p>
+            <p>RETRO</p>
         </div>
     </header>
     <nav class="nav-Product" id="nav-Product">
@@ -55,7 +55,7 @@ else {
                 <li><a href="/products">Home</a></li>
                 <li><a href="/products/category/spain">España</a></li>
                 <li><a href="/products/category/europa">Europa</a></li>
-                <li><a href="/products/category/selecciones">Selecciones</a></li>
+                <li><a href="/products/category/seleccion">Selecciones</a></li>
                 <li><a href="/products/category/mundo">Resto del mundo</a></li>
                 <li><a href="/products/category/campeones">Oliver & Benji</a></li>
                 <li><a href="/dashboard/">Iniciar Sesión</a></li>
