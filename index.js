@@ -2,17 +2,18 @@ const express = require ("express");
 const app = express();
 const dbConnection = require('./config/bd');
 const router = require('./routes/productRoutes');
+const routerApi = require('./routes/apiStoreRoutes');
 const path = require('path');
 
 const cors = require ('cors');
 app.use(cors());
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/public', express.static(path.join(__dirname, 'public')))
 app.use('/', router)
+app.use('/', routerApi)
 
 
 dbConnection()
