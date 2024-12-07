@@ -1,8 +1,76 @@
 const Product = require('../models/Product');
 
+const baseHtml = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/style.css">
+    <title>Futbol Retro</title>
+</head>
+<body>
+`
 
-function getProductCards(products) {
-    return products.map(product => `
+function getNavBarApi(isDashboard) {
+    if (isDashboard) {
+        return `
+    <header class="headerTop">
+        <div id="logoContainer">
+            <p>FUTBOL</p>
+            <a href="/" id="logoLink">
+                <img src="/public/assets/LogoFutbolRetro.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
+            </a>
+            <p>RETRO</p>
+        </div>
+    </header>
+    <nav class="nav-Product" id="nav-Product">
+            <ul class="navProduct" id="navProduct">
+                <li><a href="/dashboard">Home</a></li>
+                <li><a href="/dashboard/category/spain">España</a></li>
+                <li><a href="/dashboard/category/europa">Europa</a></li>
+                <li><a href="/dashboard/category/seleccion">Selecciones</a></li>
+                <li><a href="/dashboard/category/mundo">Resto del mundo</a></li>
+                <li><a href="/dashboard/category/campeones">Oliver & Benji</a></li>
+                <li><a href="/dashboard/new">Nuevo producto</a></li>
+                <li><a href="/products">Cerrar Sesion</a></li>
+                <li><a href="/apistore">API Store</a></li>
+            </ul>
+        </nav>
+    <main>
+`
+} 
+else {
+    return `
+    <header class="headerTop">
+        <div id="logoContainer">
+            <p>FUTBOL</p>
+            <a href="/" id="logoLink">
+                <img src="/public/assets/LogoFutbolRetro.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
+            </a>
+            <p>RETRO</p>
+        </div>
+    </header>
+    <nav class="nav-Product" id="nav-Product">
+            <ul class="navProduct" id="navProduct">
+                <li><a href="/products">Home</a></li>
+                <li><a href="/products/category/spain">España</a></li>
+                <li><a href="/products/category/europa">Europa</a></li>
+                <li><a href="/products/category/seleccion">Selecciones</a></li>
+                <li><a href="/products/category/mundo">Resto del mundo</a></li>
+                <li><a href="/products/category/campeones">Oliver & Benji</a></li>
+                <li><a href="/dashboard/">Iniciar Sesión</a></li>
+            </ul>
+        </nav> 
+    <main>
+`};
+};
+
+
+function getProductCardsApi(products) {
+    let html = '<section class="productCard id"productCard">';
+    for (let product of products) {
+      html += `
         <div class="product-card">
           <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
           <div class="leyend">
@@ -11,69 +79,89 @@ function getProductCards(products) {
           </div>
           <button class="homeBtn" onClick="window.location.href='/products/${product._id}'">Ver</button>
         </div>
-    `).join('');
+      `;
+    }
+    return html;
   }
 
-  function getProductCard(product) {
-    return `
-    <section class="productCard" id="productCard">
-      <div class="product-card">
-        <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
-        <div class="leyend">
-          <h2>${product.team} - Temp. ${product.year}</h2>
-          <p>${product.description}</p>
-          <p>Categoria: ${product.category}</p>
-          <p>Pais: ${product.country}</p>
-          <p>Liga: ${product.league}</p>
-          <p><strong>${product.price}€</strong></p>
+  function getProductCardApi(product) {
+    let html = '<section class="productCard" id="productCard">';
+      html += `
+        <div class="product-card">
+          <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
+          <div class="leyend">
+            <h2>${product.team} - Temp. ${product.year}</h2>
+            <p>${product.description}</p>
+            <p>Categoria: ${product.category}</p>
+            <p>Pais: ${product.country}</p>
+            <p>Liga: ${product.league}</p>
+            <p><strong>${product.price}€</strong></p>
+          </div>
+          <div class="size-basket">
+            <select name="size" class="sizeProduct" id="sizeProduct">
+              <option value="" disabled selected>Talla</option>
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+            </select>
+            <input type="number" id="product-basket" name="product-basket" min="1" max="10" value="1" required>
+            <button type="submit">Añadir a la cesta</button>
+          </div>
+          <div class="editDelete">
+            <button class="homeBtn" onClick="window.location.href='/dashboard/${product._id}/edit'">Editar</button>
+            <button class="homeBtn" id="deleteProduct">Borrar</button>
+          </div>
+
         </div>
-        <div class="size-basket">
-          <select name="size" class="sizeProduct" id="sizeProduct">
-            <option value="" disabled selected>Talla</option>
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
-          </select>
-          <input type="number" id="product-basket" name="product-basket" min="1" max="10" value="1" required>
-          <button type="submit">Añadir a la cesta</button>
-        </div>
-        <div class="editDelete">
-          <button class="homeBtn" onClick="window.location.href='/dashboard/${product._id}/edit'">Editar</button>
-          <button class="homeBtn" id="deleteProduct">Borrar</button>
-        </div>
-      </div>
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          document.getElementById("deleteProduct").addEventListener('click', function() {
+        <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById("deleteProduct").addEventListener('click', function() {
             if(confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-              fetch("/dashboard/${product._id}/delete", {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
-              })
-              .then(response => response.json())
-              .then(data => {
-                alert('Producto eliminado correctamente');
-                window.location.href = '/dashboard'; 
-              })
-              .catch(error => console.error('Error:', error));
+                fetch("/dashboard/${product._id}/delete", {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json' 
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la red');
+                    }
+                    return response.json(); 
+                })
+                .then(data => {
+                    console.log('Éxito:', data);
+                    alert('Producto eliminado correctamente');
+                    window.location.href = '/dashboard'; 
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            } else {
+                console.log('Eliminación cancelada por el usuario');
             }
-          });
         });
-      </script>
-    </section>
-`;
+    });
+</script>
+        
+      `;
+    
+    return html;
   }
 
   const showProductsApi = async (req, res) => {
     try {
         const products = await Product.find(); 
-        res.status(200).json(products);
+        const productCards = getProductCardsApi(products);
+        const isDashboard = req.url.includes('dashboard');
+        const html = baseHtml + getNavBarApi(isDashboard) + productCards + '</section></body></html>';
+        res.send(html);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error al acceder a los datos." });
+        res.status(500).json({ message: "Error accessing products." });
     };
 };
 
@@ -110,12 +198,14 @@ const showProductByIdApi = async (req, res) => {
     try {
         const product = await Product.findById(req.params.productId);
         if(!product) {
-            return res.status(404).json({ messenge: "Producto no encontrado" })
+            return res.status(400).json({ messenge: "Product not found" })
         }
-        res.status(200).json(product);
+        const isDashboard = req.url.includes('dashboard');
+        const html = baseHtml + getNavBarApi(isDashboard) + getProductCardApi(product) + '</section></body></html>';
+        res.send(html);
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: "Error al acceder a los datos", error});
+        res.status(500).json({message: "Error accessing product", error});
     };
 }
 
@@ -126,7 +216,7 @@ const showEditProductApi = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
-        const html = baseHtml + getNavBar() + `
+        const html = baseHtml + getNavBarApi() + `
                 <form method="POST" id="formEditProduct" action="/dashboard/${product._id}" enctype="multipart/form-data">
                 
                     <div>
@@ -225,7 +315,7 @@ const showEditProductApi = async (req, res) => {
         </html>
         `;
         console.log(html)
-        res.json(html);
+        res.send(html);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error while accessing the product" });
@@ -235,7 +325,7 @@ const showEditProductApi = async (req, res) => {
 const showNewProductApi = async (req, res) => {
     try {
         const isDashboard = req.url.includes('dashboard');
-        const html = baseHtml + getNavBar(isDashboard) + `
+        const html = baseHtml + getNavBarApi(isDashboard) + `
                 
                 <form action="/dashboard" method="POST">
 
@@ -292,7 +382,7 @@ const showNewProductApi = async (req, res) => {
         </body>
     </html>
     `;
-        res.json(html);
+        res.send(html);
     } catch (error) {
         console.error(error);
         res.status(500).json({message: "The form cannot be accessed"});
@@ -316,10 +406,13 @@ const deleteProductApi = async (req, res) => {
 const showProductsByCategoryApi = async (req, res) => {
     try {
         const products = await Product.find({category: req.params.category}); 
-        res.status(200).json(products)
+        const productCards = getProductCardsApi(products);
+        const isDashboard = req.url.includes('dashboard');
+        const html = baseHtml + getNavBarApi(isDashboard) + productCards + '</section></body></html>';
+        res.send(html);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error al acceder a los datos" });
+        res.status(500).json({ message: "Error accessing products." });
     };
 }
 
@@ -369,4 +462,3 @@ module.exports = {
     showProductsByCategoryApi,
     updateProductApi
 }
-

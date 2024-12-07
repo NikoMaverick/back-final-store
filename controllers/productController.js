@@ -1,167 +1,12 @@
 const Product = require('../models/Product');
 
-const baseHtml = `
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/public/style.css">
-    <title>Futbol Retro</title>
-</head>
-<body>
-`
-
-function getNavBar(isDashboard) {
-    if (isDashboard) {
-        return `
-    <header class="headerTop">
-        <div id="logoContainer">
-            <p>FUTBOL</p>
-            <a href="/" id="logoLink">
-                <img src="/public/assets/LogoFutbolRetro.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
-            </a>
-            <p>RETRO</p>
-        </div>
-    </header>
-    <nav class="nav-Product" id="nav-Product">
-            <ul class="navProduct" id="navProduct">
-                <li><a href="/dashboard">Home</a></li>
-                <li><a href="/dashboard/category/spain">España</a></li>
-                <li><a href="/dashboard/category/europa">Europa</a></li>
-                <li><a href="/dashboard/category/seleccion">Selecciones</a></li>
-                <li><a href="/dashboard/category/mundo">Resto del mundo</a></li>
-                <li><a href="/dashboard/category/campeones">Oliver & Benji</a></li>
-                <li><a href="/dashboard/new">Nuevo producto</a></li>
-                <li><a href="/products">Cerrar Sesion</a></li>
-                <li><a href="/apistore">API Store</a></li>
-            </ul>
-        </nav>
-    <main>
-`
-} 
-else {
-    return `
-    <header class="headerTop">
-        <div id="logoContainer">
-            <p>FUTBOL</p>
-            <a href="/" id="logoLink">
-                <img src="/public/assets/LogoFutbolRetro.png" alt="Logo" id="logo" style="width: 100px; height: auto;">
-            </a>
-            <p>RETRO</p>
-        </div>
-    </header>
-    <nav class="nav-Product" id="nav-Product">
-            <ul class="navProduct" id="navProduct">
-                <li><a href="/products">Home</a></li>
-                <li><a href="/products/category/spain">España</a></li>
-                <li><a href="/products/category/europa">Europa</a></li>
-                <li><a href="/products/category/seleccion">Selecciones</a></li>
-                <li><a href="/products/category/mundo">Resto del mundo</a></li>
-                <li><a href="/products/category/campeones">Oliver & Benji</a></li>
-                <li><a href="/dashboard/">Iniciar Sesión</a></li>
-            </ul>
-        </nav> 
-    <main>
-`};
-};
-
-
-function getProductCards(products) {
-    let html = '<section class="productCard id"productCard">';
-    for (let product of products) {
-      html += `
-        <div class="product-card">
-          <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
-          <div class="leyend">
-            <h2>${product.team}</h2>
-            <h3>Temporada ${product.year}</h3>
-          </div>
-          <button class="homeBtn" onClick="window.location.href='/products/${product._id}'">Ver</button>
-        </div>
-      `;
-    }
-    return html;
-  }
-
-  function getProductCard(product) {
-    let html = '<section class="productCard" id="productCard">';
-      html += `
-        <div class="product-card">
-          <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}">
-          <div class="leyend">
-            <h2>${product.team} - Temp. ${product.year}</h2>
-            <p>${product.description}</p>
-            <p>Categoria: ${product.category}</p>
-            <p>Pais: ${product.country}</p>
-            <p>Liga: ${product.league}</p>
-            <p><strong>${product.price}€</strong></p>
-          </div>
-          <div class="size-basket">
-            <select name="size" class="sizeProduct" id="sizeProduct">
-              <option value="" disabled selected>Talla</option>
-              <option value="XS">XS</option>
-              <option value="S">S</option>
-              <option value="M">M</option>
-              <option value="L">L</option>
-              <option value="XL">XL</option>
-              <option value="XXL">XXL</option>
-            </select>
-            <input type="number" id="product-basket" name="product-basket" min="1" max="10" value="1" required>
-            <button type="submit">Añadir a la cesta</button>
-          </div>
-          <div class="editDelete">
-            <button class="homeBtn" onClick="window.location.href='/dashboard/${product._id}/edit'">Editar</button>
-            <button class="homeBtn" id="deleteProduct">Borrar</button>
-          </div>
-
-        </div>
-        <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById("deleteProduct").addEventListener('click', function() {
-            if(confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-                fetch("/dashboard/${product._id}/delete", {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json' 
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la red');
-                    }
-                    return response.json(); 
-                })
-                .then(data => {
-                    console.log('Éxito:', data);
-                    alert('Producto eliminado correctamente');
-                    window.location.href = '/dashboard'; 
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            } else {
-                console.log('Eliminación cancelada por el usuario');
-            }
-        });
-    });
-</script>
-        
-      `;
-    
-    return html;
-  }
-
   const showProducts = async (req, res) => {
     try {
         const products = await Product.find(); 
-        const productCards = getProductCards(products);
-        const isDashboard = req.url.includes('dashboard');
-        const html = baseHtml + getNavBar(isDashboard) + productCards + '</section></body></html>';
-        res.send(html);
+        res.status(200).json(products);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error accessing products." });
+        res.status(500).json({ message: "Error al acceder a los datos." });
     };
 };
 
@@ -171,7 +16,7 @@ const createProduct = async (req, res) => {
     try {
         const { team, year, description, category, country, league, image, size, price } = req.body
         if (!team || !year || !description || !category || !country || !league || !size || !price) {
-            return res.status(400).json({ message: "All fields are required" });
+            return res.status(400).json({ message: "Todos los campos son obligatorios" });
         }
 
         const product = await Product.create({
@@ -189,7 +34,7 @@ const createProduct = async (req, res) => {
         res.redirect(`/dashboard/${product._id}`);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error creating the product" });
+        res.status(500).json({ message: "No se ha podido crear el pruducto" });
     };
 };
 
@@ -198,221 +43,208 @@ const showProductById = async (req, res) => {
     try {
         const product = await Product.findById(req.params.productId);
         if(!product) {
-            return res.status(400).json({ messenge: "Product not found" })
+            return res.status(404).json({ messenge: "Producto no encontrado" })
         }
-        const isDashboard = req.url.includes('dashboard');
-        const html = baseHtml + getNavBar(isDashboard) + getProductCard(product) + '</section></body></html>';
-        res.send(html);
+        res.status(200).json(product);
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: "Error accessing product", error});
+        res.status(500).json({message: "Error al acceder a los datos", error});
     };
 }
 
 
 const showEditProduct = async (req, res) => {
-    try {
-        const product = await Product.findById(req.params.productId);
-        if (!product) {
-            return res.status(404).json({ message: "Product not found" });
-        }
-        const html = baseHtml + getNavBar() + `
-                <form method="POST" id="formEditProduct" action="/dashboard/${product._id}" enctype="multipart/form-data">
-                
-                    <div>
-                        <h2 class="editH2">EDITAR PRODUCTO</h2>
-                    </div>
-                
-                    <label for="team">Equipo</label>
-                    <input type="text" id="team" name="team" value="${product.team}" required>
-                    
-                    <label for="year">Temporada</label>
-                    <input type="text" id="year" name="year" value"${product.year}" required>
-                
-                    <label for="description">Descripción</label>
-                    <textarea id="description" name="description" required>${product.description}</textarea>
-                    
-                
-                    <label for="category">Categoría</label>
-                    <select name="category" id="categoryProduct" ${product.category} class="categoryProduct" required>>
-                        <option value="" disabled selected>Producto</option>
-                        <option value="spain">España</option>
-                        <option value="europa">Europa</option>
-                        <option value="seleccion">Selecciones</option>
-                        <option value="mundo">Resto del mundo</option>
-                        <option value="campeones">Oliver & Benji</option>
-                    </select>                                      
+        try {
+            const product = await Product.findById(req.params.productId);
 
-                    <label for="country">País</label>
-                    <input type="text" id="country" name="country" ${product.country} required>
+            if (!product) {
+                return res.status(404).json({ message: "Producto no encontrado" });
+            }
 
-                    <label for="league">Liga</label>
-                    <input type="text" id="league" name="league" ${product.league} required>
-
-                     
-                    <label for="image">Imagen</label>
-                    <img src="/public/assets/${product.image}" alt="${product.team} ${product.year}" />
-                    <input type="file" id="image" name="image">
-
-                    <label for="size">Talla</label>
-                    <select name="size" class="size" id="size" ${product.size} required>
-                        <option value="" disabled selected>Talla</option>
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                    </select>
-                    
-                    <label for="price">Precio</label>
-                    <input type="number" id="price" name="price" min="0" value="${product.price}" required>
-
-                    <button type="submit">Actualizar producto</button>
-                    <button type="button" class="cancelButton" id="cancelButton">Cancelar</button>    
-
-                    
-                </form>
-            </main>
-        </body>
-        <script>
-            document.getElementById('formEditProduct').addEventListener('submit', function(event) {
-                    event.preventDefault();
-
-                    const formData = new FormData(this);
-
-                    
-                    const data = {};
-                    formData.forEach((value, key) => {
-                        data[key] = value;
-                    });
-
-                    fetch("/dashboard/${product._id}", {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
+            const formEditData = {
+                form: {
+                    method: "POST",
+                    action: `/dashboard/${product._id}`,
+                    enctype: "multipart/form-data",
+                    fields: [
+                        {
+                            label: "Equipo",
+                            type: "text",
+                            id: "team",
+                            name: "team",
+                            value: product.team,
+                            required: true
                         },
-                        body: JSON.stringify(data),
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error en la red');
+                        {
+                            label: "Temporada",
+                            type: "text",
+                            id: "year",
+                            name: "year",
+                            value: product.year,
+                            required: true
+                        },
+                        {
+                            label: "Descripción",
+                            type: "textarea",
+                            id: "description",
+                            name: "description",
+                            value: product.description,
+                            required: true
+                        },
+                        {
+                            label: "Categoría",
+                            type: "select",
+                            id: "categoryProduct",
+                            name: "category",
+                            value: product.category,
+                            options: [
+                                { value: "spain", label: "España" },
+                                { value: "europa", label: "Europa" },
+                                { value: "seleccion", label: "Selecciones" },
+                                { value: "mundo", label: "Resto del mundo" },
+                                { value: "campeones", label: "Oliver & Benji" }
+                            ],
+                            required: true
+                        },
+                        {
+                            label: "País",
+                            type: "text",
+                            id: "country",
+                            name: "country",
+                            value: product.country,
+                            required: true
+                        },
+                        {
+                            label: "Liga",
+                            type: "text",
+                            id: "league",
+                            name: "league",
+                            value: product.league,
+                            required: true
+                        },
+                        {
+                            label: "Imagen",
+                            type: "file",
+                            id: "image",
+                            name: "image",
+                            value: product.image
+                        },
+                        {
+                            label: "Talla",
+                            type: "select",
+                            id: "size",
+                            name: "size",
+                            value: product.size,
+                            options: [
+                                { value: "XS", label: "XS" },
+                                { value: "S", label: "S" },
+                                { value: "M", label: "M" },
+                                { value: "L", label: "L" },
+                                { value: "XL", label: "XL" },
+                                { value: "XXL", label: "XXL" }
+                            ],
+                            required: true
+                        },
+                        {
+                            label: "Precio",
+                            type: "number",
+                            id: "price",
+                            name: "price",
+                            value: product.price,
+                            min: 0,
+                            required: true
                         }
-                        return response.json(); 
-                    })
-                    .then(data => {
-                        console.log('Éxito:', data);
-                        window.location.href="/dashboard/${product._id}"
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });
-                });
-                document.getElementById('cancelButton').addEventListener('click', function() {
-                    window.history.back();
-                });
-        </script>
-        </html>
-        `;
-        console.log(html)
-        res.send(html);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error while accessing the product" });
+                    ]
+                },
+                buttons: [
+                    { type: "submit", text: "Actualizar producto" },
+                    { type: "button", text: "Cancelar", action: "window.history.back();" }
+                ]
+            };
+            res.json(formEditData);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "No se puede acceder al producto" });
+        }
     };
-};
+    
+    
 
 const showNewProduct = async (req, res) => {
     try {
-        const isDashboard = req.url.includes('dashboard');
-        const html = baseHtml + getNavBar(isDashboard) + `
-                
-                <form action="/dashboard" method="POST">
-
-                        <div>
-                            <h2 class="createH2">Añadir Producto</h2>
-                        </div>
-
-                        <label for="team">Equipo</label>
-                        <input type="text" id="team" name="team" required>
-
-                        <label for="year">Temporada</label>
-                        <input type="text" id="year" name="year" required>
-
-                        <label for="description">Descripción</label>
-                        <textarea id="description" name="description" required></textarea>
-
-                        <label for="category">Categoría</label>
-                        <select name="category" id="category" required>
-                            <option value="" disabled selected>Añada categoria</option>
-                            <option value="spain">España</option>
-                            <option value="europa">Europa</option>
-                            <option value="seleccion">Selecciones</option>
-                            <option value="mundo">Resto del Mundo</option>
-                            <option value="campeones">Oliver & Benji</option>
-                        </select>
-
-                        <label for="country">País</label>
-                        <input type="text" id="country" name="country" required>
-
-                        <label for="league">Liga</label>
-                        <input type="text" id="league" name="league" required>
-
-                        <label for="image">Imagen</label>
-                        <input type="file" id="image" name="image">
-
-                        <label for="size">Talla</label>
-                        <select name="size" id="size" required>
-                            <option value="" disabled selected>Añada talla</option>
-                            <option value="XS">XS</option>
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                            <option value="XXL">XXL</option>
-                        </select>
-
-                        <label for="price">Precio</label>
-                        <input type="number" id="price" name="price" min="0" required>
-
-                        <button type="submit">Añadir producto</button>
-                    </form>
-                </div>
-            </main>
-        </body>
-    </html>
-    `;
-        res.send(html);
+        const formNewData = {
+            action: "/dashboard",
+            method: "POST",
+            fields: [
+                { type: "text", id: "team", name: "team", label: "Equipo", required: true },
+                { type: "text", id: "year", name: "year", label: "Temporada", required: true },
+                { type: "textarea", id: "description", name: "description", label: "Descripción", required: true },
+                { 
+                    type: "select", 
+                    id: "category", 
+                    name: "category", 
+                    label: "Categoría", 
+                    required: true,
+                    options: [
+                        { value: "", text: "Añada categoria", disabled: true, selected: true },
+                        { value: "spain", text: "España" },
+                        { value: "europa", text: "Europa" },
+                        { value: "seleccion", text: "Selecciones" },
+                        { value: "mundo", text: "Resto del Mundo" },
+                        { value: "campeones", text: "Oliver & Benji" }
+                    ]
+                },
+                { type: "text", id: "country", name: "country", label: "País", required: true },
+                { type: "text", id: "league", name: "league", label: "Liga", required: true },
+                { type: "file", id: "image", name: "image", label: "Imagen" },
+                { 
+                    type: "select", 
+                    id: "size", 
+                    name: "size", 
+                    label: "Talla", 
+                    required: true,
+                    options: [
+                        { value: "", text: "Añada talla", disabled: true, selected: true },
+                        { value: "XS", text: "XS" },
+                        { value: "S", text: "S" },
+                        { value: "M", text: "M" },
+                        { value: "L", text: "L" },
+                        { value: "XL", text: "XL" },
+                        { value: "XXL", text: "XXL" }
+                    ]
+                },
+                { type: "number", id: "price", name: "price", label: "Precio", min: 0, required: true },
+                { type: "submit", label: "Añadir producto" }
+            ]
+        };
+        res.json(formNewData);
     } catch (error) {
         console.error(error);
-        res.status(500).json({message: "The form cannot be accessed"});
+        res.status(500).json({ message: "No se puede acceder al formulario" });
     }
-    
 };
+
 
 const deleteProduct = async (req, res) => {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.productId);
         if (!deletedProduct) {
-            return res.status(404).json({ message: "Product not found" });
+            return res.status(404).json({ message: "Producto no encontrado" });
         }
-        res.status(200).json({ message: "Product deleted successfully" });
+        res.status(200).json({ message: "Producto eliminado" });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error deleting product" });
+        res.status(500).json({ message: "No se ha podido eliminar el producto" });
     }
 }
 
 const showProductsByCategory = async (req, res) => {
     try {
         const products = await Product.find({category: req.params.category}); 
-        const productCards = getProductCards(products);
-        const isDashboard = req.url.includes('dashboard');
-        const html = baseHtml + getNavBar(isDashboard) + productCards + '</section></body></html>';
-        res.send(html);
+        res.status(200).json(products)
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error accessing products." });
+        res.status(500).json({ message: "No se puede acceder al producto" });
     };
 }
 
@@ -422,7 +254,7 @@ const updateProduct = async (req, res) => {
         image = '';
         
         if (!team || !year || !description || !category || !country || !league || !size || !price) {
-            return res.status(400).json({ message: "All fields are required" });
+            return res.status(400).json({ message: "Todos los campos son obligatorios" });
         }
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.productId,
@@ -440,12 +272,12 @@ const updateProduct = async (req, res) => {
             { new: true } 
         );
         if (!updatedProduct) {
-            return res.status(404).json({ message: "Product not found" });
+            return res.status(404).json({ message: "Producto no encontrado" });
         }
-        res.status(200).json({ message: "Product updated successfully", product: updatedProduct });
+        res.status(200).json({ message: "Producto actualizado", product: updatedProduct });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error updating product" });
+        res.status(500).json({ message: "No se ha podido actualizar el producto" });
     };
 };
 
