@@ -1,3 +1,5 @@
+
+/*
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
@@ -21,3 +23,4 @@ router.put('/dashboard/:productId', apiStoreController.updateProductApi);
 router.delete('/dashboard/:productId/delete', apiStoreController.deleteProductApi);
 
 module.exports = router
+*/
