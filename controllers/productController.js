@@ -14,7 +14,7 @@ const Product = require('../models/Product');
 const createProduct = async (req, res) => {
 
     try {
-        const { team, year, description, category, country, league, image, size, price } = req.body
+        const { team, year, description, category, country, league, image, size, price } = req.body;
         if (!team || !year || !description || !category || !country || !league || !size || !price) {
             return res.status(400).json({ message: "Todos los campos son obligatorios" });
         }
@@ -31,7 +31,7 @@ const createProduct = async (req, res) => {
             price
 
         });
-        res.redirect(`/dashboard/${product._id}`);
+        return res.status(201).json(product);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "No se ha podido crear el pruducto" });
