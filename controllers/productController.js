@@ -12,13 +12,12 @@ const Product = require('../models/Product');
 
 
 const createProduct = async (req, res) => {
-
     try {
-        const { team, year, description, category, country, league, image, size, price } = req.body;
+        const { team, year, description, category, country, league, size, price } = req.body;
         if (!team || !year || !description || !category || !country || !league || !size || !price) {
             return res.status(400).json({ message: "Todos los campos son obligatorios" });
         }
-
+        const image = req.file.filename;
         const product = await Product.create({
             team,
             year,
@@ -29,13 +28,13 @@ const createProduct = async (req, res) => {
             image,
             size,
             price
-
         });
+
         return res.status(201).json(product);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "No se ha podido crear el pruducto" });
-    };
+        res.status(500).json({ message: "No se ha podido crear el producto" });
+    }
 };
 
 
@@ -56,7 +55,6 @@ const showProductById = async (req, res) => {
 const showEditProduct = async (req, res) => {
         try {
             const product = await Product.findById(req.params.productId);
-
             if (!product) {
                 return res.status(404).json({ message: "Producto no encontrado" });
             }
@@ -161,7 +159,7 @@ const showEditProduct = async (req, res) => {
                     { type: "button", text: "Cancelar", action: "window.history.back();" }
                 ]
             };
-            res.json(formEditData);
+            res.json(product);
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: "No se puede acceder al producto" });
@@ -252,7 +250,6 @@ const updateProduct = async (req, res) => {
     try {
         let { team, year, description, category, country, league, image, size, price } = req.body;
         image = '';
-        
         if (!team || !year || !description || !category || !country || !league || !size || !price) {
             return res.status(400).json({ message: "Todos los campos son obligatorios" });
         }
